@@ -43,6 +43,9 @@ jobs:
           java-version: '25'
           distribution: 'microsoft'
 
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
       - name: Build with Gradle
         run: ./gradlew clean build
 
