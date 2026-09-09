@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: rupe
+  output:
+    ansi:
+      enabled: always
+springdoc:
+  swagger-ui:
+    tag-sorter: alpha
+    operations-sorter: method
+    display-request-duration: true
+    filter: true
+    try-it-out-enabled: true
+    syntax-highlight:
+      theme: nord
