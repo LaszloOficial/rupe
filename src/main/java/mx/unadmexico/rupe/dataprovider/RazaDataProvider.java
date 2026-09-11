@@ -4,9 +4,9 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import mx.unadmexico.rupe.converter.RazaToRazaDtoConverter;
+import mx.unadmexico.rupe.converter.RazaEntityToRazaDtoConverter;
+import mx.unadmexico.rupe.converter.RazaRequestToRazaEntityConverter;
 import mx.unadmexico.rupe.domain.dto.RazaDto;
-import mx.unadmexico.rupe.domain.entity.Raza;
 import mx.unadmexico.rupe.dto.request.RazaRequest;
 import mx.unadmexico.rupe.repository.RazaRepository;
 import org.springframework.data.domain.Page;
@@ -18,53 +18,53 @@ import org.springframework.stereotype.Component;
 public class RazaDataProvider {
 
   private final RazaRepository repository;
-  private final RazaToRazaDtoConverter razaToRazaDtoConverter;
+  private final RazaEntityToRazaDtoConverter razaEntityToRazaDtoConverter;
+  private final RazaRequestToRazaEntityConverter razaRequestToRazaEntityConverter;
 
   public RazaDto create(RazaRequest request) {
     return Optional.of(request)
-        .map(r -> new Raza(null, r.nombre(), r.descripcion()))
+        .map(razaRequestToRazaEntityConverter)
         .map(repository::saveAndFlush)
-        .map(razaToRazaDtoConverter)
+        .map(razaEntityToRazaDtoConverter)
         .orElseThrow();
   }
 
   public Page<RazaDto> getAll(Pageable pageable) {
-    return repository.findAll(pageable).map(razaToRazaDtoConverter);
+    return repository.findAll(pageable).map(razaEntityToRazaDtoConverter);
   }
 
   public Optional<RazaDto> getById(Long id) {
-    return repository.findById(id).map(razaToRazaDtoConverter);
+    return repository.findById(id).map(razaEntityToRazaDtoConverter);
   }
 
   public Optional<RazaDto> update(Long id, RazaRequest request) {
     return repository
         .findById(id)
         .map(
-            r -> {
-              r.setNombre(request.nombre());
-              r.setDescripcion(request.descripcion());
-              return r;
+            raza -> {
+              raza.setNombre(request.nombre());
+              raza.setDescripcion(request.descripcion());
+              return raza;
             })
         .map(repository::save)
-        .map(razaToRazaDtoConverter);
+        .map(razaEntityToRazaDtoConverter);
   }
 
   public Optional<RazaDto> partialUpdate(Long id, RazaRequest request) {
     return repository
         .findById(id)
         .map(
-            r -> {
+            raza -> {
               if (isNotBlank(request.nombre())) {
-                r.setNombre(request.nombre());
+                raza.setNombre(request.nombre());
               }
-
               if (isNotBlank(request.descripcion())) {
-                r.setDescripcion(request.descripcion());
+                raza.setDescripcion(request.descripcion());
               }
-              return r;
+              return raza;
             })
         .map(repository::save)
-        .map(razaToRazaDtoConverter);
+        .map(razaEntityToRazaDtoConverter);
   }
 
   public void delete(Long id) {

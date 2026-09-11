@@ -20,7 +20,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Raza {
+public class RazaEntity {
 
   @Id
   @GeneratedValue(strategy = IDENTITY)
