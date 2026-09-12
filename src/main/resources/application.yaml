@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mysql://rupe-server.mysql.database.azure.com:3306/rupe
-    username: Admin_RUPE
-    password: ******
+    url: ${DB_URL:jdbc:mysql://rupe-server.mysql.database.azure.com:3306/rupe}
+    username: ${DB_USERNAME:user}
+    password: ${DB_PASSWORD:password}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
